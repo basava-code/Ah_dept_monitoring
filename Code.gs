@@ -3,26 +3,29 @@
  *  Pashudhan Kartavya — Google Apps Script Backend (Code.gs)
  *  Animal Husbandry Department, Government of Uttarakhand
  * ------------------------------------------------------------
- *  Acts as the shared database for the PWA using a Google Sheet.
- *  Each task (with its milestones/subtasks) is stored as one row
- *  of JSON, keyed by task id.
+ *  Shared database for the PWA, stored in a Google Sheet.
+ *  Each task (with its milestones/subtasks) is stored as one
+ *  row of JSON, keyed by task id.
  *
- *  SETUP
- *   1. Go to script.google.com → New Project
- *   2. Delete the default code, paste this whole file
- *   3. Deploy → New Deployment → Web App
+ *  IMPORTANT — this is a *container-bound* script. It only ever
+ *  touches the ONE spreadsheet it is attached to, via
+ *  getActive(). That needs only the narrow, NON-sensitive
+ *  "spreadsheets.currentonly" scope, so Google will NOT show
+ *  the "This app is blocked / tried to access sensitive info"
+ *  error during authorization.
+ *
+ *  SETUP  (see README for the full walkthrough)
+ *   1. Create a blank Google Sheet  ->  https://sheets.new
+ *   2. In that sheet:  Extensions -> Apps Script
+ *   3. Delete the default code, paste this whole file, Save
+ *   4. Deploy -> New Deployment -> Web App
  *        Execute as: Me   |   Who has access: Anyone
- *   4. Authorize, copy the Web App URL (…/exec)
- *   5. Paste that URL into the app's setup screen → Connect
- *
- *  The first request auto-creates a spreadsheet named
- *  "Pashudhan Kartavya DB" in your Google Drive.
+ *   5. Authorize (approve the prompt), copy the Web App URL
+ *   6. Paste that URL into the app's setup screen -> Connect
  * ============================================================
  */
 
-var DB_NAME    = 'Pashudhan Kartavya DB';
 var SHEET_NAME = 'Tasks';
-var PROP_KEY   = 'PK_SPREADSHEET_ID';
 
 function doGet(e) {
   var action = (e && e.parameter && e.parameter.action) || 'ping';
@@ -39,23 +42,15 @@ function doGet(e) {
   }
 }
 
-// POST is supported too (in case the client is changed to POST later).
+// POST supported too (in case the client is changed to POST later).
 function doPost(e) {
   return doGet(e);
 }
 
 // ── Sheet helpers ─────────────────────────────────────────────
+// Uses ONLY the bound spreadsheet -> scope: spreadsheets.currentonly
 function getSheet() {
-  var props = PropertiesService.getScriptProperties();
-  var id = props.getProperty(PROP_KEY);
-  var ss;
-  if (id) {
-    try { ss = SpreadsheetApp.openById(id); } catch (e) { ss = null; }
-  }
-  if (!ss) {
-    ss = SpreadsheetApp.create(DB_NAME);
-    props.setProperty(PROP_KEY, ss.getId());
-  }
+  var ss = SpreadsheetApp.getActive();
   var sh = ss.getSheetByName(SHEET_NAME);
   if (!sh) {
     sh = ss.insertSheet(SHEET_NAME);

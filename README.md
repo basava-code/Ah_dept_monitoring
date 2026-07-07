@@ -36,20 +36,43 @@ and **branding** have been tailored to Animal Husbandry.
 | `manifest.json` | PWA manifest (name, icons, theme). |
 | `service-worker.js` | Offline caching + network-first HTML updates. |
 | `Code.gs` | Google Apps Script backend — the shared database over a Google Sheet. |
+| `appsscript.json` | Apps Script manifest — pins the narrow, non-sensitive OAuth scope. |
 | `icon-192.png`, `icon-512.png` | App icons. |
 
 ## Setup (one-time, admin only)
 
-1. Open [script.google.com](https://script.google.com) → **New Project**.
-2. Delete the default code and paste the contents of **`Code.gs`**.
-3. **Deploy → New Deployment → Web App** — *Execute as:* **Me**, *Who has access:* **Anyone**.
-4. **Authorize**, then copy the **Web App URL** (ends in `/exec`).
-5. Open the app, paste the URL on the setup screen, and click **Connect**.
+The backend is a **container-bound** script — it lives inside one Google Sheet and only touches that
+sheet. This keeps the permission request to the narrow, non-sensitive `spreadsheets.currentonly` scope,
+so Google does **not** show a *“This app is blocked / tried to access sensitive info”* error.
 
-A spreadsheet named **“Pashudhan Kartavya DB”** is created automatically in your Google Drive on first use.
+1. Create a blank spreadsheet at **[sheets.new](https://sheets.new)** (this sheet becomes your database).
+2. In that sheet: **Extensions → Apps Script**.
+3. Delete the default code, paste the contents of **`Code.gs`**, and **Save**.
+4. **Deploy → New Deployment → Web App** — *Execute as:* **Me**, *Who has access:* **Anyone**.
+5. **Authorize** (approve the prompt), then copy the **Web App URL** (ends in `/exec`).
+6. Open the app, paste the URL on the setup screen, and click **Connect**.
 
-Prefer to try it without a backend? Click **“Use offline”** on the setup screen — data is stored in your
-browser only (no sharing).
+Tasks are stored on a tab named **`Tasks`** inside that spreadsheet.
+
+### Still seeing “This app is blocked”?
+
+That is Google **Workspace / organization policy** (common on government `@*.gov.in` domains), not a bug —
+the admin has blocked unverified third-party apps. Options, in order of ease:
+
+- **Use a personal `@gmail.com` account** for the Apps Script step (the sheet can still be shared with the team).
+- Ask your **Workspace admin** to allow the app: *Admin console → Security → API controls → App access control → “Trust internal, domain-owned apps”* (or add the app’s OAuth client ID to the trusted list).
+- Confirm you used **Extensions → Apps Script from inside a Sheet** (bound script), **not** a standalone
+  “New Project” — the bound script requests a much narrower scope and is far less likely to be blocked.
+
+### Optional: pin the scope explicitly
+
+`appsscript.json` already pins the narrow scope. To use it, in the Apps Script editor open
+**Project Settings (⚙) → “Show ‘appsscript.json’ manifest file”**, then paste the contents of
+`appsscript.json`. This is optional — the bound `Code.gs` auto-requests the same narrow scope anyway.
+
+### No backend needed to try it
+
+Click **“Use offline”** on the setup screen — data is stored in your browser only (no sharing).
 
 ## Hosting
 

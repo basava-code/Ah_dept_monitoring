@@ -310,13 +310,15 @@
     <div class="setup-steps">
       <strong style="font-size:13px;display:block;margin-bottom:6px;">One-time setup (admin only):</strong>
       <ol>
-        <li>Go to <code>script.google.com</code> → <strong>New Project</strong></li>
-        <li>Delete existing code → Paste the <strong>Code.gs</strong> file contents</li>
+        <li>Create a blank sheet at <code>sheets.new</code></li>
+        <li>In the sheet: <strong>Extensions → Apps Script</strong></li>
+        <li>Delete existing code → Paste the <strong>Code.gs</strong> file contents → Save</li>
         <li>Click <strong>Deploy → New Deployment → Web App</strong></li>
         <li>Execute as: <strong>Me</strong> | Access: <strong>Anyone</strong></li>
         <li>Click <strong>Deploy → Authorize → copy the Web App URL</strong></li>
         <li>Paste the URL below and click <strong>Connect</strong></li>
       </ol>
+      <div style="font-size:11px;color:var(--ink-muted);margin-top:8px;line-height:1.6;">Tip: use <strong>Extensions → Apps Script from inside a Sheet</strong> (not a standalone project). This keeps the permission request narrow, so Google won’t show a “this app is blocked” message. If your official account still blocks it, use a personal Gmail account for this step.</div>
     </div>
     <div class="url-input-row">
       <input type="url" class="url-input" id="scriptUrlInput" placeholder="https://script.google.com/macros/s/…/exec">
