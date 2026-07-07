@@ -35,8 +35,9 @@ and **branding** have been tailored to Animal Husbandry.
 | `index.html` | The entire single-page app (UI + logic). |
 | `manifest.json` | PWA manifest (name, icons, theme). |
 | `service-worker.js` | Offline caching + network-first HTML updates. |
-| `Code.gs` | Google Apps Script backend — the shared database over a Google Sheet. |
-| `appsscript.json` | Apps Script manifest — pins the narrow, non-sensitive OAuth scope. |
+| `Code.gs` | Google Apps Script backend — shared database over a Google Sheet (narrow `spreadsheets.currentonly` scope). |
+| `Code-NoScope.gs` | Alternate backend — stores data in the script's own storage; **requests no scopes at all**. Use if Google shows "this app is blocked / sensitive info". |
+| `appsscript.json` | Apps Script manifest — pins the narrow OAuth scope (for `Code.gs`). |
 | `icon-192.png`, `icon-512.png` | App icons. |
 
 ## Setup (one-time, admin only)
@@ -54,15 +55,22 @@ so Google does **not** show a *“This app is blocked / tried to access sensitiv
 
 Tasks are stored on a tab named **`Tasks`** inside that spreadsheet.
 
-### Still seeing “This app is blocked”?
+### Still seeing “This app is blocked / tried to access sensitive info”?
 
-That is Google **Workspace / organization policy** (common on government `@*.gov.in` domains), not a bug —
-the admin has blocked unverified third-party apps. Options, in order of ease:
+That message means Google is still being asked for a **sensitive scope**, or your account **policy blocks
+unverified apps outright** (common on government `@*.gov.in` / managed domains). Fix it with any one of these:
 
-- **Use a personal `@gmail.com` account** for the Apps Script step (the sheet can still be shared with the team).
-- Ask your **Workspace admin** to allow the app: *Admin console → Security → API controls → App access control → “Trust internal, domain-owned apps”* (or add the app’s OAuth client ID to the trusted list).
-- Confirm you used **Extensions → Apps Script from inside a Sheet** (bound script), **not** a standalone
-  “New Project” — the bound script requests a much narrower scope and is far less likely to be blocked.
+1. **Use the zero-scope backend `Code-NoScope.gs`.** It stores data in the script's own private storage
+   (`PropertiesService`) and touches **no** Google user data, so there is **no sensitive scope to block**.
+   Paste it into a new `script.google.com` project and deploy as above. *(This removes the exact reason
+   Google states — try this first.)*
+2. **Use a personal `@gmail.com` account** for the Apps Script step. Your data isn't sensitive to Google —
+   the block is about the *account policy*, not the tasks. The resulting Web App URL works for everyone.
+3. Ask your **Workspace admin** to allow it: *Admin console → Security → API controls → App access control →
+   “Trust internal, domain-owned apps.”*
+4. If using the Sheet backend (`Code.gs`), make sure it was created via **Extensions → Apps Script from
+   inside a Sheet** (a *bound* script) — **not** a standalone “New Project.” A standalone script forces the
+   broad, sensitive Sheets scope.
 
 ### Optional: pin the scope explicitly
 
