@@ -14,4 +14,4 @@
  *       Leave this file as-is (the app defaults to <this-domain>/pb).
  * ============================================================ */
 
-// window.POCKETBASE_URL = 'https://pb.yourdomain.com';
+window.POCKETBASE_URL = 'https://pb.187.127.146.81.sslip.io';
