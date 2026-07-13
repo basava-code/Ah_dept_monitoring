@@ -5,8 +5,9 @@ Duty · Discipline · Delivery.
 
 A lightweight, installable **Progressive Web App (PWA)** for tracking departmental tasks, milestones,
 responsible officers, deadlines and performance across every workstream of the Animal Husbandry
-Department. It uses **Google Sheets (via Google Apps Script)** as a free, shared database so all
-officers and staff see one live task list — with a full offline fallback.
+Department. It uses a **self-hosted PocketBase backend** for a real database with **officer logins**
+(every edit attributed to a named officer), an **admin dashboard**, and automatic backups — with a full
+offline fallback. A legacy Google Apps Script backend is also included for a zero-server option.
 
 This app is adapted from the Skill Development Department's *Kaushal Kartavya* platform; the app
 engine, dashboard and export tooling are the same, while the **workstreams**, **officer designations**
@@ -26,66 +27,53 @@ and **branding** have been tailored to Animal Husbandry.
 - **Exports** — CSV, Google Sheets, Google Docs table, and print / PDF reports; plus weekly / monthly
   officer performance reports.
 - **Offline-first PWA** — installable on Android / desktop, works with no connection; live sync when
-  connected to the shared Google Sheet backend.
+  signed in to the shared backend.
 
 ## Files
 
 | File | Purpose |
 |------|---------|
 | `index.html` | The entire single-page app (UI + logic). |
+| `config.js` | **Admin edits this** — points the app at your PocketBase server URL. |
 | `manifest.json` | PWA manifest (name, icons, theme). |
 | `service-worker.js` | Offline caching + network-first HTML updates. |
-| `Code.gs` | Google Apps Script backend — shared database over a Google Sheet (narrow `spreadsheets.currentonly` scope). |
-| `Code-NoScope.gs` | Alternate backend — stores data in the script's own storage; **requests no scopes at all**. Use if Google shows "this app is blocked / sensitive info". |
-| `appsscript.json` | Apps Script manifest — pins the narrow OAuth scope (for `Code.gs`). |
+| `pocketbase/SETUP.md` | **Full VPS deployment guide** — PocketBase + nginx + HTTPS + officer accounts. |
+| `pocketbase/nginx-ahdept.conf` | Ready-to-use nginx config (serves the app + proxies PocketBase). |
+| `pocketbase/pocketbase.service` | systemd unit to run PocketBase as a service. |
+| `Code.gs`, `Code-NoScope.gs`, `appsscript.json` | *Legacy* Google Apps Script backend (zero-server alternative). |
 | `icon-192.png`, `icon-512.png` | App icons. |
 
-## Setup (one-time, admin only)
+## Setup — PocketBase backend (recommended)
 
-The backend is a **container-bound** script — it lives inside one Google Sheet and only touches that
-sheet. This keeps the permission request to the narrow, non-sensitive `spreadsheets.currentonly` scope,
-so Google does **not** show a *“This app is blocked / tried to access sensitive info”* error.
+This gives a real database, **officer logins with an audit trail**, an admin dashboard and backups,
+all on your own server. Full step-by-step (Hostinger VPS or any Ubuntu/Debian box) is in
+**[`pocketbase/SETUP.md`](pocketbase/SETUP.md)**. In brief:
 
-1. Create a blank spreadsheet at **[sheets.new](https://sheets.new)** (this sheet becomes your database).
-2. In that sheet: **Extensions → Apps Script**.
-3. Delete the default code, paste the contents of **`Code.gs`**, and **Save**.
-4. **Deploy → New Deployment → Web App** — *Execute as:* **Me**, *Who has access:* **Anyone**.
-5. **Authorize** (approve the prompt), then copy the **Web App URL** (ends in `/exec`).
-6. Open the app, paste the URL on the setup screen, and click **Connect**.
+1. On the VPS: install nginx + PocketBase; run PocketBase as a service (`pocketbase/pocketbase.service`).
+2. Serve this repo's files with nginx and proxy PocketBase on a `pb.` subdomain (`pocketbase/nginx-ahdept.conf`),
+   then enable HTTPS with `certbot`.
+3. Set your backend URL in **`config.js`**: `window.POCKETBASE_URL = 'https://pb.yourdomain.com';`
+4. In the PocketBase admin dashboard (`https://pb.yourdomain.com/_/`): create the **`tasks`** collection
+   (`taskId` text, `payload` JSON, `updatedBy` text), set API rules to `@request.auth.id != ""`, and add
+   an **officer account** (in `users`) for each staff member.
 
-Tasks are stored on a tab named **`Tasks`** inside that spreadsheet.
+Officers then open `https://ah.yourdomain.com`, **sign in**, and share one live task list — every edit
+attributed to a named officer. You manage accounts, data and backups from the admin dashboard.
 
-### Still seeing “This app is blocked / tried to access sensitive info”?
+### Try it with no backend
 
-That message means Google is still being asked for a **sensitive scope**, or your account **policy blocks
-unverified apps outright** (common on government `@*.gov.in` / managed domains). Fix it with any one of these:
+Click **“Use offline”** on the sign-in screen — data is stored in that browser only (no sharing).
 
-1. **Use the zero-scope backend `Code-NoScope.gs`.** It stores data in the script's own private storage
-   (`PropertiesService`) and touches **no** Google user data, so there is **no sensitive scope to block**.
-   Paste it into a new `script.google.com` project and deploy as above. *(This removes the exact reason
-   Google states — try this first.)*
-2. **Use a personal `@gmail.com` account** for the Apps Script step. Your data isn't sensitive to Google —
-   the block is about the *account policy*, not the tasks. The resulting Web App URL works for everyone.
-3. Ask your **Workspace admin** to allow it: *Admin console → Security → API controls → App access control →
-   “Trust internal, domain-owned apps.”*
-4. If using the Sheet backend (`Code.gs`), make sure it was created via **Extensions → Apps Script from
-   inside a Sheet** (a *bound* script) — **not** a standalone “New Project.” A standalone script forces the
-   broad, sensitive Sheets scope.
+### Legacy: Google Apps Script backend
 
-### Optional: pin the scope explicitly
-
-`appsscript.json` already pins the narrow scope. To use it, in the Apps Script editor open
-**Project Settings (⚙) → “Show ‘appsscript.json’ manifest file”**, then paste the contents of
-`appsscript.json`. This is optional — the bound `Code.gs` auto-requests the same narrow scope anyway.
-
-### No backend needed to try it
-
-Click **“Use offline”** on the setup screen — data is stored in your browser only (no sharing).
+The `Code.gs` / `Code-NoScope.gs` files are a zero-server alternative that stores data in Google
+(a Sheet, or the script's own storage). Kept for reference; the PocketBase path above is recommended for
+a department tool because it adds real logins and accountability. (These have no officer logins.)
 
 ## Hosting
 
-Because it is fully static, host `index.html` and its assets anywhere — GitHub Pages, Google Sites,
-Netlify, Vercel, or any static file server.
+The front-end is fully static, so `index.html` and its assets can be served by nginx on your VPS
+(recommended, alongside PocketBase) or any static host. HTTPS is required for the PWA to install.
 
 ## Notes
 

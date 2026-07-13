@@ -1,0 +1,22 @@
+## systemd unit for PocketBase — Pashudhan Kartavya
+## Install:  sudo cp pocketbase/pocketbase.service /etc/systemd/system/
+##           sudo systemctl daemon-reload && sudo systemctl enable --now pocketbase
+## Logs:     journalctl -u pocketbase -f
+
+[Unit]
+Description=PocketBase (Pashudhan Kartavya backend)
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+LimitNOFILE=4096
+Restart=always
+RestartSec=5s
+WorkingDirectory=/opt/pocketbase
+# Listens on localhost only; nginx terminates TLS and reverse-proxies to it.
+ExecStart=/opt/pocketbase/pocketbase serve --http=127.0.0.1:8090
+
+[Install]
+WantedBy=multi-user.target

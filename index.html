@@ -296,6 +296,7 @@
 
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="config.js"></script>
 </head>
 <body>
 
@@ -306,27 +307,20 @@
     <h1>PASHUDHAN KARTAVYA</h1>
     <div class="sub" style="font-weight:600;color:var(--accent);font-size:13.5px;">The Digital Mission Execution Platform</div>
     <div class="sub" style="letter-spacing:.12em;font-size:12px;margin-top:2px;">Duty &nbsp;&middot;&nbsp; Discipline &nbsp;&middot;&nbsp; Delivery</div>
-    <p>This app uses Google Sheets as its shared database so all officers and staff see one live task list. Complete the one-time setup below — takes about 5 minutes.</p>
-    <div class="setup-steps">
-      <strong style="font-size:13px;display:block;margin-bottom:6px;">One-time setup (admin only):</strong>
-      <ol>
-        <li>Create a blank sheet at <code>sheets.new</code></li>
-        <li>In the sheet: <strong>Extensions → Apps Script</strong></li>
-        <li>Delete existing code → Paste the <strong>Code.gs</strong> file contents → Save</li>
-        <li>Click <strong>Deploy → New Deployment → Web App</strong></li>
-        <li>Execute as: <strong>Me</strong> | Access: <strong>Anyone</strong></li>
-        <li>Click <strong>Deploy → Authorize → copy the Web App URL</strong></li>
-        <li>Paste the URL below and click <strong>Connect</strong></li>
-      </ol>
-      <div style="font-size:11px;color:var(--ink-muted);margin-top:8px;line-height:1.6;">Tip: use <strong>Extensions → Apps Script from inside a Sheet</strong> (not a standalone project). This keeps the permission request narrow, so Google won’t show a “this app is blocked” message. If your official account still blocks it, use a personal Gmail account for this step.</div>
+    <p>Sign in with the officer account issued by your department admin to access the shared task list.</p>
+    <div style="text-align:left;">
+      <input type="email" class="url-input" id="loginEmail" placeholder="Official email" autocomplete="username" style="width:100%;margin-bottom:8px;">
+      <input type="password" class="url-input" id="loginPass" placeholder="Password" autocomplete="current-password" style="width:100%;margin-bottom:10px;" onkeydown="if(event.key==='Enter')doLogin()">
+      <button class="btn btn-accent" style="width:100%;" onclick="doLogin()">Sign In →</button>
     </div>
-    <div class="url-input-row">
-      <input type="url" class="url-input" id="scriptUrlInput" placeholder="https://script.google.com/macros/s/…/exec">
-      <button class="btn btn-accent" onclick="connectToSheet()">Connect →</button>
-    </div>
-    <div class="url-hint" id="setupMsg">Paste your Google Apps Script Web App URL above.</div>
-    <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);">
-      <button class="btn btn-cancel btn-sm" onclick="useOfflineMode()">Use offline (local browser only — no sharing)</button>
+    <div class="url-hint" id="setupMsg">Enter the credentials issued to you by your department admin.</div>
+    <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:8px;">
+      <button class="btn btn-cancel btn-sm" onclick="useOfflineMode()">Use offline (this device only — no sharing)</button>
+      <button class="btn btn-ghost btn-sm" style="font-size:11px;" onclick="toggleServerField()">⚙ Advanced: set server URL</button>
+      <div id="serverFieldWrap" style="display:none;text-align:left;">
+        <input type="url" class="url-input" id="serverUrlInput" placeholder="https://your-domain/pb" style="width:100%;">
+        <div style="font-size:11px;color:var(--ink-muted);margin-top:4px;">Only needed if PocketBase is not reverse-proxied at <code>/pb</code> on this domain.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -344,10 +338,11 @@
     </div>
     <div class="header-right">
       <div id="syncBadge" class="sync-badge sync-ok">● Live</div>
+      <div id="userChip" class="sync-badge" style="display:none;background:rgba(0,0,0,.06);color:var(--ink);">👤 <span id="userName" style="margin-left:3px;"></span></div>
       <button class="btn btn-ghost btn-sm" id="viewToggleBtn" onclick="toggleMainView()">📊 Dashboard</button>
       <button class="btn btn-ghost btn-sm" onclick="refreshTasks()">↻ Refresh</button>
       <button class="btn btn-primary btn-sm" onclick="openModal()">＋ Add Task</button>
-      <button class="btn btn-ghost btn-sm" style="font-size:11px;" onclick="changeServer()" title="Change server URL">⚙</button>
+      <button class="btn btn-ghost btn-sm" style="font-size:11px;" onclick="logout()" title="Sign out">⏻ Sign out</button>
     </div>
   </div>
 
@@ -362,7 +357,7 @@
 
   <div class="offline-bar" id="offlineBar">
     ⚡ Offline mode — changes saved locally only.
-    <button class="btn btn-sm btn-cancel" onclick="changeServer()" style="margin-left:auto;">Reconnect</button>
+    <button class="btn btn-sm btn-cancel" onclick="logout()" style="margin-left:auto;">Sign in</button>
   </div>
 
   <div class="alert-banner" id="alertBanner">
@@ -966,8 +961,14 @@
 <script>
 // ── Config ────────────────────────────────────────────────────
 const STORE_KEY   = 'ahdept_tasks_pwa_v1';
-const URL_KEY     = 'ahdept_script_url';
 const OFFLINE_KEY = 'ahdept_offline';
+// PocketBase backend. If PocketBase is reverse-proxied under /pb on this same
+// domain (recommended — see README), leave PB_DEFAULT as is; officers only ever
+// see a login screen with no URL to enter. Otherwise set it via ⚙ Advanced.
+const PB_DEFAULT   = (window.POCKETBASE_URL || (location.origin + '/pb')).replace(/\/+$/,'');
+const PB_URL_KEY   = 'ahdept_pb_url';
+const PB_TOKEN_KEY = 'ahdept_pb_token';
+const PB_USER_KEY  = 'ahdept_pb_user';
 
 const ALL_WS = [
   // A. Governance & Administration
@@ -996,36 +997,51 @@ let tasks       = [];
 let editingId   = null;
 let currentView = 'all';
 let pendingSubs = [];
-let scriptUrl   = '';
 let isOffline   = false;
+let pbUrl       = '';
+let pbToken     = '';
+let pbUser      = null;
 
 // ── Boot ──────────────────────────────────────────────────────
 window.onload = function() {
-  scriptUrl = localStorage.getItem(URL_KEY) || '';
+  pbUrl     = localStorage.getItem(PB_URL_KEY) || PB_DEFAULT;
+  pbToken   = localStorage.getItem(PB_TOKEN_KEY) || '';
+  try { pbUser = JSON.parse(localStorage.getItem(PB_USER_KEY) || 'null'); } catch(e){ pbUser = null; }
   isOffline = localStorage.getItem(OFFLINE_KEY) === '1';
-  if (scriptUrl || isOffline) launchApp();
+  const sv = document.getElementById('serverUrlInput');
+  if (sv && pbUrl && pbUrl !== PB_DEFAULT) sv.value = pbUrl;
+  if (isOffline || (pbToken && pbUser)) launchApp();
 };
 
-function connectToSheet() {
-  const val = document.getElementById('scriptUrlInput').value.trim();
-  if (!val.startsWith('https://script.google.com')) {
-    setSetupMsg('⚠ Please paste a valid Apps Script URL starting with https://script.google.com', true);
-    return;
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass  = document.getElementById('loginPass').value;
+  const sv    = document.getElementById('serverUrlInput');
+  pbUrl = (sv && sv.value.trim()) ? sv.value.trim().replace(/\/+$/,'') : PB_DEFAULT;
+  if (!email || !pass) { setSetupMsg('⚠ Enter your email and password.', true); return; }
+  setSetupMsg('⏳ Signing in…', false);
+  try {
+    const res = await fetch(pbUrl + '/api/collections/users/auth-with-password', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ identity: email, password: pass })
+    });
+    const d = await res.json();
+    if (!res.ok || !d.token) throw new Error(d.message || 'Invalid email or password');
+    pbToken = d.token; pbUser = d.record;
+    localStorage.setItem(PB_URL_KEY, pbUrl);
+    localStorage.setItem(PB_TOKEN_KEY, pbToken);
+    localStorage.setItem(PB_USER_KEY, JSON.stringify(pbUser));
+    localStorage.removeItem(OFFLINE_KEY);
+    isOffline = false;
+    launchApp();
+  } catch(e) {
+    setSetupMsg('⚠ ' + (e.message || 'Sign-in failed. Check the server URL and your credentials.'), true);
   }
-  setSetupMsg('⏳ Connecting…', false);
-  fetch(val + '?action=ping', { method:'GET', mode:'cors' })
-    .then(r => r.json())
-    .then(d => {
-      if (d.ok) {
-        localStorage.setItem(URL_KEY, val);
-        localStorage.removeItem(OFFLINE_KEY);
-        scriptUrl = val; isOffline = false;
-        launchApp();
-      } else {
-        setSetupMsg('⚠ Server error: ' + (d.error||'unknown'), true);
-      }
-    })
-    .catch(() => setSetupMsg('⚠ Could not reach the URL. Ensure it is deployed with "Anyone" access.', true));
+}
+
+function toggleServerField() {
+  const w = document.getElementById('serverFieldWrap');
+  w.style.display = (w.style.display === 'none' || !w.style.display) ? 'block' : 'none';
 }
 
 function setSetupMsg(msg, isError) {
@@ -1036,19 +1052,27 @@ function setSetupMsg(msg, isError) {
 
 function useOfflineMode() {
   localStorage.setItem(OFFLINE_KEY, '1');
-  isOffline = true; scriptUrl = '';
+  isOffline = true;
   launchApp();
 }
 
-function changeServer() {
-  localStorage.removeItem(URL_KEY);
+function logout() {
+  localStorage.removeItem(PB_TOKEN_KEY);
+  localStorage.removeItem(PB_USER_KEY);
   localStorage.removeItem(OFFLINE_KEY);
+  pbToken = ''; pbUser = null;
   location.reload();
 }
 
 function launchApp() {
   document.getElementById('setupScreen').style.display = 'none';
   document.getElementById('mainApp').style.display = 'block';
+  const nameEl = document.getElementById('userName');
+  const chip   = document.getElementById('userChip');
+  if (!isOffline && pbUser && nameEl && chip) {
+    nameEl.textContent = pbUser.name || pbUser.email || 'Officer';
+    chip.style.display = '';
+  }
   if (isOffline) {
     document.getElementById('offlineBar').classList.add('show');
     tasks = loadLocal(); renderTasks(); checkAlerts();
@@ -1067,19 +1091,35 @@ function setSyncBadge(state, msg) {
   b.innerHTML = (icons[state]||'●') + ' ' + msg;
 }
 
-async function gasRequest(params) {
-  const url = scriptUrl + '?' + new URLSearchParams(params).toString();
-  const res = await fetch(url, { method:'GET', mode:'cors' });
-  return res.json();
+// PocketBase REST helper — adds the auth token and force-logs-out on 401.
+async function pbFetch(path, opts) {
+  opts = opts || {};
+  const headers = Object.assign(
+    { 'Content-Type': 'application/json' },
+    pbToken ? { 'Authorization': pbToken } : {},
+    opts.headers || {}
+  );
+  const res = await fetch(pbUrl + path, Object.assign({}, opts, { headers }));
+  if (res.status === 401) { logout(); throw new Error('Session expired — please sign in again.'); }
+  return res;
+}
+
+// Map an app task id -> PocketBase record id.
+async function pbFindId(taskId) {
+  const res = await pbFetch('/api/collections/tasks/records?perPage=1&filter=' +
+    encodeURIComponent('taskId="' + taskId + '"'));
+  const d = await res.json();
+  return (d.items && d.items[0]) ? d.items[0].id : null;
 }
 
 async function refreshTasks() {
   if (isOffline) return;
   setSyncBadge('loading', 'Loading…');
   try {
-    const data = await gasRequest({ action:'getTasks' });
-    if (data.error) throw new Error(data.error);
-    tasks = data.tasks || [];
+    const res = await pbFetch('/api/collections/tasks/records?perPage=500&sort=-updated');
+    const d = await res.json();
+    if (!res.ok) throw new Error(d.message || 'load failed');
+    tasks = (d.items || []).map(r => Object.assign({}, r.payload, { _pbId: r.id, updatedBy: r.updatedBy }));
     saveLocal(tasks);
     setSyncBadge('ok', 'Live');
     renderTasks(); checkAlerts();
@@ -1093,8 +1133,16 @@ async function pushTask(task) {
   if (isOffline) { saveLocal(tasks); return; }
   setSyncBadge('saving', 'Saving…');
   try {
-    const data = await gasRequest({ action:'saveTask', payload: JSON.stringify(task) });
-    if (data.error) throw new Error(data.error);
+    const payload = Object.assign({}, task); delete payload._pbId;
+    const who  = (pbUser && (pbUser.name || pbUser.email)) || '';
+    const body = JSON.stringify({ taskId: task.id, payload: payload, updatedBy: who });
+    const pbId = task._pbId || await pbFindId(task.id);
+    const res  = pbId
+      ? await pbFetch('/api/collections/tasks/records/' + pbId, { method:'PATCH', body })
+      : await pbFetch('/api/collections/tasks/records', { method:'POST', body });
+    const d = await res.json();
+    if (!res.ok) throw new Error(d.message || 'save failed');
+    task._pbId = d.id; task.updatedBy = who;
     saveLocal(tasks);
     setSyncBadge('ok', 'Saved ✓');
     setTimeout(() => setSyncBadge('ok', 'Live'), 2000);
@@ -1108,8 +1156,11 @@ async function pushDelete(id) {
   if (isOffline) { saveLocal(tasks); return; }
   setSyncBadge('saving', 'Deleting…');
   try {
-    const data = await gasRequest({ action:'deleteTask', id });
-    if (data.error) throw new Error(data.error);
+    const pbId = await pbFindId(id);
+    if (pbId) {
+      const res = await pbFetch('/api/collections/tasks/records/' + pbId, { method:'DELETE' });
+      if (!res.ok && res.status !== 404) { const d = await res.json(); throw new Error(d.message || 'delete failed'); }
+    }
     saveLocal(tasks);
     setSyncBadge('ok', 'Live');
   } catch(e) { setSyncBadge('error', 'Delete failed'); }

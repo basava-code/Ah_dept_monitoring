@@ -2,8 +2,8 @@
 //  Pashudhan Kartavya — Service Worker  (v1)
 //  Network-first for the app HTML so updates always appear.
 // ============================================================
-const CACHE_NAME = 'pashudhan-kartavya-v2';
-const ASSETS = ['./','./index.html','./manifest.json','./icon-192.png','./icon-512.png'];
+const CACHE_NAME = 'pashudhan-kartavya-v3';
+const ASSETS = ['./','./index.html','./config.js','./manifest.json','./icon-192.png','./icon-512.png'];
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)));
@@ -21,8 +21,8 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const url = event.request.url;
 
-  // Apps Script calls always go to network (never cached)
-  if (url.includes('script.google.com')) {
+  // Backend API calls (PocketBase) and all writes: always network, never cache
+  if (event.request.method !== 'GET' || url.includes('/api/') || url.includes('/pb/')) {
     event.respondWith(
       fetch(event.request).catch(() =>
         new Response(JSON.stringify({ error:'offline' }), { headers:{'Content-Type':'application/json'} }))
