@@ -2,7 +2,7 @@
 //  Pashudhan Kartavya — Service Worker  (v1)
 //  Network-first for the app HTML so updates always appear.
 // ============================================================
-const CACHE_NAME = 'pashudhan-kartavya-v3';
+const CACHE_NAME = 'pashudhan-kartavya-v4';
 const ASSETS = ['./','./index.html','./config.js','./manifest.json','./icon-192.png','./icon-512.png'];
 
 self.addEventListener('install', event => {

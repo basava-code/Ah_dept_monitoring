@@ -117,6 +117,10 @@
   .sidebar-item.active{background:var(--accent-light);color:var(--accent);font-weight:600;border-left:3px solid var(--accent);}
   .sidebar-count{margin-left:auto;font-size:11px;background:var(--border);color:var(--ink-muted);border-radius:10px;padding:1px 7px;font-weight:600;}
   .sidebar-item.active .sidebar-count{background:var(--accent);color:white;}
+  .ws-text{display:flex;flex-direction:column;gap:1px;flex:1;min-width:0;}
+  .ws-name{white-space:normal;line-height:1.2;}
+  .ws-owner{font-size:10px;color:var(--ink-muted);font-weight:600;line-height:1.15;}
+  .sidebar-item.active .ws-owner{color:var(--accent);}
 
   /* ── Content ── */
   .content{flex:1;overflow-y:auto;padding:16px 20px;}
@@ -392,118 +396,7 @@
         <button class="sidebar-item" id="nav-low" onclick="setView('low')">🟢 Low <span class="sidebar-count" id="cnt-low">0</span></button>
       </div>
 
-      <!-- A. Governance &amp; Administration -->
-      <div class="sidebar-section">
-        <span class="sidebar-label">⚖️ Governance &amp; Administration</span>
-        <button class="sidebar-item" id="nav-CabinetMatters" onclick="setView('CabinetMatters')">🗝️ Cabinet Matters <span class="sidebar-count" id="cnt-CabinetMatters">0</span></button>
-        <button class="sidebar-item" id="nav-ImportantReferences" onclick="setView('ImportantReferences')">📌 Important References <span class="sidebar-count" id="cnt-ImportantReferences">0</span></button>
-        <button class="sidebar-item" id="nav-DAHD" onclick="setView('DAHD')">🏛️ DAHD (GoI) <span class="sidebar-count" id="cnt-DAHD">0</span></button>
-        <button class="sidebar-item" id="nav-CourtCases" onclick="setView('CourtCases')">⚖️ Court Cases <span class="sidebar-count" id="cnt-CourtCases">0</span></button>
-        <button class="sidebar-item" id="nav-PoliciesSchemes" onclick="setView('PoliciesSchemes')">📜 Policies &amp; Schemes <span class="sidebar-count" id="cnt-PoliciesSchemes">0</span></button>
-        <button class="sidebar-item" id="nav-AuditVigilance" onclick="setView('AuditVigilance')">🔎 Audit &amp; Vigilance <span class="sidebar-count" id="cnt-AuditVigilance">0</span></button>
-        <button class="sidebar-item" id="nav-DisciplinaryProceedings" onclick="setView('DisciplinaryProceedings')">🔍 Disciplinary Proceedings <span class="sidebar-count" id="cnt-DisciplinaryProceedings">0</span></button>
-        <button class="sidebar-item" id="nav-Establishment" onclick="setView('Establishment')">🏢 Establishment <span class="sidebar-count" id="cnt-Establishment">0</span></button>
-        <button class="sidebar-item" id="nav-TrainingCapacity" onclick="setView('TrainingCapacity')">🎓 Training &amp; Capacity Building <span class="sidebar-count" id="cnt-TrainingCapacity">0</span></button>
-        <button class="sidebar-item" id="nav-PriorityProjects" onclick="setView('PriorityProjects')">⭐ Priority Projects <span class="sidebar-count" id="cnt-PriorityProjects">0</span></button>
-        <button class="sidebar-item" id="nav-RTI" onclick="setView('RTI')">📄 RTI <span class="sidebar-count" id="cnt-RTI">0</span></button>
-        <button class="sidebar-item" id="nav-RTS" onclick="setView('RTS')">⏱️ RTS <span class="sidebar-count" id="cnt-RTS">0</span></button>
-        <button class="sidebar-item" id="nav-PSC" onclick="setView('PSC')">🏛️ Public Service Commission <span class="sidebar-count" id="cnt-PSC">0</span></button>
-        <button class="sidebar-item" id="nav-CMHelpline" onclick="setView('CMHelpline')">☎️ CM Helpline <span class="sidebar-count" id="cnt-CMHelpline">0</span></button>
-        <button class="sidebar-item" id="nav-CallCentre" onclick="setView('CallCentre')">📞 Call Centre (1962) <span class="sidebar-count" id="cnt-CallCentre">0</span></button>
-      </div>
-
-      <!-- B. Livestock Health &amp; Veterinary Services -->
-      <div class="sidebar-section">
-        <span class="sidebar-label">🩺 Livestock Health &amp; Veterinary</span>
-        <button class="sidebar-item" id="nav-VetHospitals" onclick="setView('VetHospitals')">🏥 Veterinary Hospitals &amp; Dispensaries <span class="sidebar-count" id="cnt-VetHospitals">0</span></button>
-        <button class="sidebar-item" id="nav-DiseaseControl" onclick="setView('DiseaseControl')">🦠 Disease Control &amp; Surveillance <span class="sidebar-count" id="cnt-DiseaseControl">0</span></button>
-        <button class="sidebar-item" id="nav-Vaccination" onclick="setView('Vaccination')">💉 Vaccination Programmes <span class="sidebar-count" id="cnt-Vaccination">0</span></button>
-        <button class="sidebar-item" id="nav-FMDCP" onclick="setView('FMDCP')">🐄 FMD Control (FMD-CP) <span class="sidebar-count" id="cnt-FMDCP">0</span></button>
-        <button class="sidebar-item" id="nav-Brucellosis" onclick="setView('Brucellosis')">🧫 Brucellosis Control <span class="sidebar-count" id="cnt-Brucellosis">0</span></button>
-        <button class="sidebar-item" id="nav-MobileVetUnits" onclick="setView('MobileVetUnits')">🚑 Mobile Veterinary Units (1962) <span class="sidebar-count" id="cnt-MobileVetUnits">0</span></button>
-        <button class="sidebar-item" id="nav-VetLabs" onclick="setView('VetLabs')">🔬 Veterinary Labs &amp; Diagnostics <span class="sidebar-count" id="cnt-VetLabs">0</span></button>
-        <button class="sidebar-item" id="nav-LHDCP" onclick="setView('LHDCP')">🩺 Livestock Health &amp; Disease Control (LHDCP) <span class="sidebar-count" id="cnt-LHDCP">0</span></button>
-        <button class="sidebar-item" id="nav-Zoonotic" onclick="setView('Zoonotic')">🐕 Zoonotic &amp; Anti-Rabies <span class="sidebar-count" id="cnt-Zoonotic">0</span></button>
-      </div>
-
-      <!-- C. Livestock Development &amp; Breeding -->
-      <div class="sidebar-section">
-        <span class="sidebar-label">🐂 Livestock Development &amp; Breeding</span>
-        <button class="sidebar-item" id="nav-CattleBuffalo" onclick="setView('CattleBuffalo')">🐃 Cattle &amp; Buffalo Development <span class="sidebar-count" id="cnt-CattleBuffalo">0</span></button>
-        <button class="sidebar-item" id="nav-ArtificialInsemination" onclick="setView('ArtificialInsemination')">🧬 Artificial Insemination (AI) <span class="sidebar-count" id="cnt-ArtificialInsemination">0</span></button>
-        <button class="sidebar-item" id="nav-RGM" onclick="setView('RGM')">🐄 Rashtriya Gokul Mission (RGM) <span class="sidebar-count" id="cnt-RGM">0</span></button>
-        <button class="sidebar-item" id="nav-SemenStations" onclick="setView('SemenStations')">🧪 Semen Stations &amp; Bull Farms <span class="sidebar-count" id="cnt-SemenStations">0</span></button>
-        <button class="sidebar-item" id="nav-SheepGoat" onclick="setView('SheepGoat')">🐐 Sheep &amp; Goat Development <span class="sidebar-count" id="cnt-SheepGoat">0</span></button>
-        <button class="sidebar-item" id="nav-Piggery" onclick="setView('Piggery')">🐖 Piggery Development <span class="sidebar-count" id="cnt-Piggery">0</span></button>
-        <button class="sidebar-item" id="nav-Poultry" onclick="setView('Poultry')">🐔 Poultry Development <span class="sidebar-count" id="cnt-Poultry">0</span></button>
-        <button class="sidebar-item" id="nav-FodderDevelopment" onclick="setView('FodderDevelopment')">🌾 Fodder &amp; Feed Development <span class="sidebar-count" id="cnt-FodderDevelopment">0</span></button>
-        <button class="sidebar-item" id="nav-BreedConservation" onclick="setView('BreedConservation')">🧾 Breed Improvement &amp; Conservation <span class="sidebar-count" id="cnt-BreedConservation">0</span></button>
-      </div>
-
-      <!-- D. Dairy Development -->
-      <div class="sidebar-section">
-        <span class="sidebar-label">🥛 Dairy Development</span>
-        <button class="sidebar-item" id="nav-MilkProduction" onclick="setView('MilkProduction')">🥛 Milk Production <span class="sidebar-count" id="cnt-MilkProduction">0</span></button>
-        <button class="sidebar-item" id="nav-DairyCooperatives" onclick="setView('DairyCooperatives')">🤝 Dairy Cooperatives &amp; Milk Unions <span class="sidebar-count" id="cnt-DairyCooperatives">0</span></button>
-        <button class="sidebar-item" id="nav-NPDD" onclick="setView('NPDD')">🏭 National Programme for Dairy Dev (NPDD) <span class="sidebar-count" id="cnt-NPDD">0</span></button>
-        <button class="sidebar-item" id="nav-DairyInfra" onclick="setView('DairyInfra')">🏗️ Dairy Infrastructure (DIDF) <span class="sidebar-count" id="cnt-DairyInfra">0</span></button>
-        <button class="sidebar-item" id="nav-MilkMarketing" onclick="setView('MilkMarketing')">🚚 Milk Procurement &amp; Marketing <span class="sidebar-count" id="cnt-MilkMarketing">0</span></button>
-      </div>
-
-      <!-- E. Schemes &amp; Missions -->
-      <div class="sidebar-section">
-        <span class="sidebar-label">🎯 Schemes &amp; Missions</span>
-        <button class="sidebar-item" id="nav-NLM" onclick="setView('NLM')">🎯 National Livestock Mission (NLM) <span class="sidebar-count" id="cnt-NLM">0</span></button>
-        <button class="sidebar-item" id="nav-NADCP" onclick="setView('NADCP')">🛡️ Animal Disease Control (NADCP) <span class="sidebar-count" id="cnt-NADCP">0</span></button>
-        <button class="sidebar-item" id="nav-LivestockInsurance" onclick="setView('LivestockInsurance')">📋 Livestock Insurance (Pashudhan Bima) <span class="sidebar-count" id="cnt-LivestockInsurance">0</span></button>
-        <button class="sidebar-item" id="nav-KCCAH" onclick="setView('KCCAH')">💳 Kisan Credit Card (AH) <span class="sidebar-count" id="cnt-KCCAH">0</span></button>
-        <button class="sidebar-item" id="nav-AHIDF" onclick="setView('AHIDF')">🏦 AH Infrastructure Dev Fund (AHIDF) <span class="sidebar-count" id="cnt-AHIDF">0</span></button>
-        <button class="sidebar-item" id="nav-Entrepreneurship" onclick="setView('Entrepreneurship')">💡 Entrepreneurship &amp; Startups <span class="sidebar-count" id="cnt-Entrepreneurship">0</span></button>
-        <button class="sidebar-item" id="nav-CMGhoshna" onclick="setView('CMGhoshna')">📢 CM Ghoshna <span class="sidebar-count" id="cnt-CMGhoshna">0</span></button>
-        <button class="sidebar-item" id="nav-NABARD" onclick="setView('NABARD')">🏦 NABARD <span class="sidebar-count" id="cnt-NABARD">0</span></button>
-        <button class="sidebar-item" id="nav-EAP" onclick="setView('EAP')">🌐 Externally Aided Projects (EAP) <span class="sidebar-count" id="cnt-EAP">0</span></button>
-        <button class="sidebar-item" id="nav-CSS" onclick="setView('CSS')">📁 Centrally Sponsored Schemes (CSS) <span class="sidebar-count" id="cnt-CSS">0</span></button>
-        <button class="sidebar-item" id="nav-StateSectorInfra" onclick="setView('StateSectorInfra')">🏗️ State Sector Infrastructure <span class="sidebar-count" id="cnt-StateSectorInfra">0</span></button>
-      </div>
-
-      <!-- F. Extension &amp; Farmer Welfare -->
-      <div class="sidebar-section">
-        <span class="sidebar-label">🧑‍🌾 Extension &amp; Farmer Welfare</span>
-        <button class="sidebar-item" id="nav-GaushalaManagement" onclick="setView('GaushalaManagement')">🛕 Gaushala Management <span class="sidebar-count" id="cnt-GaushalaManagement">0</span></button>
-        <button class="sidebar-item" id="nav-FarmerTraining" onclick="setView('FarmerTraining')">👨‍🏫 Farmer Training &amp; Extension <span class="sidebar-count" id="cnt-FarmerTraining">0</span></button>
-        <button class="sidebar-item" id="nav-PashuSakhi" onclick="setView('PashuSakhi')">🧑‍⚕️ Pashu Sakhi / Para-vets <span class="sidebar-count" id="cnt-PashuSakhi">0</span></button>
-        <button class="sidebar-item" id="nav-FieldCamps" onclick="setView('FieldCamps')">⛺ Field Services &amp; Health Camps <span class="sidebar-count" id="cnt-FieldCamps">0</span></button>
-        <button class="sidebar-item" id="nav-KamdhenuSchemes" onclick="setView('KamdhenuSchemes')">🐄 Kamdhenu / Gau Seva Schemes <span class="sidebar-count" id="cnt-KamdhenuSchemes">0</span></button>
-      </div>
-
-      <!-- G. Technology &amp; Digital Governance -->
-      <div class="sidebar-section">
-        <span class="sidebar-label">💻 Technology &amp; Digital Governance</span>
-        <button class="sidebar-item" id="nav-SoftwareTechnology" onclick="setView('SoftwareTechnology')">💻 Software &amp; Technology <span class="sidebar-count" id="cnt-SoftwareTechnology">0</span></button>
-        <button class="sidebar-item" id="nav-INAPH" onclick="setView('INAPH')">🗂️ INAPH / Livestock Registry <span class="sidebar-count" id="cnt-INAPH">0</span></button>
-        <button class="sidebar-item" id="nav-LivestockCensus" onclick="setView('LivestockCensus')">📊 Livestock Census &amp; Data <span class="sidebar-count" id="cnt-LivestockCensus">0</span></button>
-        <button class="sidebar-item" id="nav-ApuniSarkar" onclick="setView('ApuniSarkar')">🖥️ Apuni Sarkar / e-Governance <span class="sidebar-count" id="cnt-ApuniSarkar">0</span></button>
-      </div>
-
-      <!-- H. Finance &amp; Performance -->
-      <div class="sidebar-section">
-        <span class="sidebar-label">📊 Finance &amp; Performance</span>
-        <button class="sidebar-item" id="nav-BudgetFinance" onclick="setView('BudgetFinance')">💰 Budget &amp; Finance <span class="sidebar-count" id="cnt-BudgetFinance">0</span></button>
-        <button class="sidebar-item" id="nav-Procurement" onclick="setView('Procurement')">🛒 Procurement <span class="sidebar-count" id="cnt-Procurement">0</span></button>
-        <button class="sidebar-item" id="nav-KPIDashboard" onclick="setView('KPIDashboard')">📈 KPI / KOI Dashboard <span class="sidebar-count" id="cnt-KPIDashboard">0</span></button>
-      </div>
-
-      <!-- I. Communication &amp; Outreach -->
-      <div class="sidebar-section">
-        <span class="sidebar-label">📢 Communication &amp; Outreach</span>
-        <button class="sidebar-item" id="nav-IECPublicAwareness" onclick="setView('IECPublicAwareness')">📢 IEC &amp; Public Awareness <span class="sidebar-count" id="cnt-IECPublicAwareness">0</span></button>
-      </div>
-
-      <!-- J. Miscellaneous -->
-      <div class="sidebar-section">
-        <span class="sidebar-label">📂 Miscellaneous</span>
-        <button class="sidebar-item" id="nav-Miscellaneous" onclick="setView('Miscellaneous')">📂 Miscellaneous <span class="sidebar-count" id="cnt-Miscellaneous">0</span></button>
-      </div>
+      <div id="wsNav"></div>
     </div><!-- end sidebar -->
 
     <!-- ── Content ── -->
@@ -601,91 +494,7 @@
         </div>
         <div class="form-group">
           <label class="form-label">Workstream</label>
-          <select class="form-select" id="f_workstream">
-            <optgroup label="A. Governance &amp; Administration">
-              <option value="CabinetMatters">Cabinet Matters</option>
-              <option value="ImportantReferences">Important References</option>
-              <option value="DAHD">DAHD (GoI)</option>
-              <option value="CourtCases">Court Cases</option>
-              <option value="PoliciesSchemes">Policies &amp; Schemes</option>
-              <option value="AuditVigilance">Audit &amp; Vigilance</option>
-              <option value="DisciplinaryProceedings">Disciplinary Proceedings</option>
-              <option value="Establishment">Establishment</option>
-              <option value="TrainingCapacity">Training &amp; Capacity Building</option>
-              <option value="PriorityProjects">Priority Projects</option>
-              <option value="RTI">RTI</option>
-              <option value="RTS">RTS</option>
-              <option value="PSC">Public Service Commission</option>
-              <option value="CMHelpline">CM Helpline</option>
-              <option value="CallCentre">Call Centre (1962)</option>
-            </optgroup>
-            <optgroup label="B. Livestock Health &amp; Veterinary Services">
-              <option value="VetHospitals">Veterinary Hospitals &amp; Dispensaries</option>
-              <option value="DiseaseControl">Disease Control &amp; Surveillance</option>
-              <option value="Vaccination">Vaccination Programmes</option>
-              <option value="FMDCP">FMD Control (FMD-CP)</option>
-              <option value="Brucellosis">Brucellosis Control</option>
-              <option value="MobileVetUnits">Mobile Veterinary Units (1962)</option>
-              <option value="VetLabs">Veterinary Labs &amp; Diagnostics</option>
-              <option value="LHDCP">Livestock Health &amp; Disease Control (LHDCP)</option>
-              <option value="Zoonotic">Zoonotic &amp; Anti-Rabies</option>
-            </optgroup>
-            <optgroup label="C. Livestock Development &amp; Breeding">
-              <option value="CattleBuffalo">Cattle &amp; Buffalo Development</option>
-              <option value="ArtificialInsemination">Artificial Insemination (AI)</option>
-              <option value="RGM">Rashtriya Gokul Mission (RGM)</option>
-              <option value="SemenStations">Semen Stations &amp; Bull Farms</option>
-              <option value="SheepGoat">Sheep &amp; Goat Development</option>
-              <option value="Piggery">Piggery Development</option>
-              <option value="Poultry">Poultry Development</option>
-              <option value="FodderDevelopment">Fodder &amp; Feed Development</option>
-              <option value="BreedConservation">Breed Improvement &amp; Conservation</option>
-            </optgroup>
-            <optgroup label="D. Dairy Development">
-              <option value="MilkProduction">Milk Production</option>
-              <option value="DairyCooperatives">Dairy Cooperatives &amp; Milk Unions</option>
-              <option value="NPDD">National Programme for Dairy Dev (NPDD)</option>
-              <option value="DairyInfra">Dairy Infrastructure (DIDF)</option>
-              <option value="MilkMarketing">Milk Procurement &amp; Marketing</option>
-            </optgroup>
-            <optgroup label="E. Schemes &amp; Missions">
-              <option value="NLM">National Livestock Mission (NLM)</option>
-              <option value="NADCP">Animal Disease Control (NADCP)</option>
-              <option value="LivestockInsurance">Livestock Insurance (Pashudhan Bima)</option>
-              <option value="KCCAH">Kisan Credit Card (AH)</option>
-              <option value="AHIDF">AH Infrastructure Dev Fund (AHIDF)</option>
-              <option value="Entrepreneurship">Entrepreneurship &amp; Startups</option>
-              <option value="CMGhoshna">CM Ghoshna</option>
-              <option value="NABARD">NABARD</option>
-              <option value="EAP">Externally Aided Projects (EAP)</option>
-              <option value="CSS">Centrally Sponsored Schemes (CSS)</option>
-              <option value="StateSectorInfra">State Sector Infrastructure</option>
-            </optgroup>
-            <optgroup label="F. Extension &amp; Farmer Welfare">
-              <option value="GaushalaManagement">Gaushala Management</option>
-              <option value="FarmerTraining">Farmer Training &amp; Extension</option>
-              <option value="PashuSakhi">Pashu Sakhi / Para-vets</option>
-              <option value="FieldCamps">Field Services &amp; Health Camps</option>
-              <option value="KamdhenuSchemes">Kamdhenu / Gau Seva Schemes</option>
-            </optgroup>
-            <optgroup label="G. Technology &amp; Digital Governance">
-              <option value="SoftwareTechnology">Software &amp; Technology</option>
-              <option value="INAPH">INAPH / Livestock Registry</option>
-              <option value="LivestockCensus">Livestock Census &amp; Data</option>
-              <option value="ApuniSarkar">Apuni Sarkar / e-Governance</option>
-            </optgroup>
-            <optgroup label="H. Finance &amp; Performance">
-              <option value="BudgetFinance">Budget &amp; Finance</option>
-              <option value="Procurement">Procurement</option>
-              <option value="KPIDashboard">KPI / KOI Dashboard</option>
-            </optgroup>
-            <optgroup label="I. Communication &amp; Outreach">
-              <option value="IECPublicAwareness">IEC &amp; Public Awareness</option>
-            </optgroup>
-            <optgroup label="J. Miscellaneous">
-              <option value="Miscellaneous">Miscellaneous</option>
-            </optgroup>
-          </select>
+          <select class="form-select" id="f_workstream" onchange="onWorkstreamChange()"></select>
         </div>
       </div>
       <div class="form-row">
@@ -752,12 +561,15 @@
               <option value="Director Dairy">Director, Dairy Development</option>
               <option value="MD Dairy Federation">MD, Dairy Federation (Aanchal)</option>
               <option value="CEO Livestock Board">CEO, Livestock Dev Board</option>
+              <option value="ULDB">ULDB — Livestock Dev Board</option>
+              <option value="USGDB">USGDB — Sheep &amp; Goat Board</option>
               <option value="Nodal Officer">Nodal Officer</option>
               <option value="Finance Consultant">Finance Consultant</option>
               <option value="MIS Consultant">MIS Consultant</option>
             </optgroup>
             <option value="Others">Others</option>
           </select>
+          <div id="wsOwnerHint" style="margin-top:5px;font-size:11px;color:var(--accent);font-weight:600;"></div>
         </div>
         <div class="form-group">
           <label class="form-label">Time to Complete</label>
@@ -970,28 +782,55 @@ const PB_URL_KEY   = 'ahdept_pb_url';
 const PB_TOKEN_KEY = 'ahdept_pb_token';
 const PB_USER_KEY  = 'ahdept_pb_user';
 
-const ALL_WS = [
-  // A. Governance & Administration
-  'CabinetMatters','ImportantReferences','DAHD','CourtCases','PoliciesSchemes','AuditVigilance','DisciplinaryProceedings','Establishment','TrainingCapacity','PriorityProjects','RTI','RTS','PSC','CMHelpline','CallCentre',
-  // B. Livestock Health & Veterinary Services
-  'VetHospitals','DiseaseControl','Vaccination','FMDCP','Brucellosis','MobileVetUnits','VetLabs','LHDCP','Zoonotic',
-  // C. Livestock Development & Breeding
-  'CattleBuffalo','ArtificialInsemination','RGM','SemenStations','SheepGoat','Piggery','Poultry','FodderDevelopment','BreedConservation',
-  // D. Dairy Development
-  'MilkProduction','DairyCooperatives','NPDD','DairyInfra','MilkMarketing',
-  // E. Schemes & Missions
-  'NLM','NADCP','LivestockInsurance','KCCAH','AHIDF','Entrepreneurship','CMGhoshna','NABARD','EAP','CSS','StateSectorInfra',
-  // F. Extension & Farmer Welfare
-  'GaushalaManagement','FarmerTraining','PashuSakhi','FieldCamps','KamdhenuSchemes',
-  // G. Technology & Digital Governance
-  'SoftwareTechnology','INAPH','LivestockCensus','ApuniSarkar',
-  // H. Finance & Performance
-  'BudgetFinance','Procurement','KPIDashboard',
-  // I. Communication & Outreach
-  'IECPublicAwareness',
-  // J. Miscellaneous
-  'Miscellaneous',
+const WS_GROUPS = [
+  { icon:'⚖️', name:'Governance & Administration', items:[
+    ['CabinetMatters','🗝️','Cabinet Matters','Director AH'],
+    ['DAHD','🏛️','DAHD (GoI)','Director AH, ULDB'],
+    ['CourtCases','⚖️','Court Cases','Director AH'],
+    ['DisciplinaryProceedings','📋','Disciplinary Proceedings','Director AH'],
+    ['PriorityProjects','⭐','Priority Projects','Director AH, ULDB'],
+    ['PSC','🏢','Public Service Commission','Director AH'],
+    ['CMHelpline','☎️','CM Helpline','Director AH'],
+    ['CMGhoshna','📢','CM Ghoshna','Director AH'],
+  ]},
+  { icon:'🩺', name:'Livestock Health & Veterinary', items:[
+    ['VetHospitals','🏥','Veterinary Hospitals & Dispensaries','Director AH'],
+    ['Vaccination','💉','Vaccination Programmes','Director AH'],
+    ['FMDCP','🦠','FMD Control (FMD-CP)','Director AH'],
+    ['MobileVetUnits','🚐','Mobile Veterinary Units (1962)','Director AH'],
+    ['LHDCP','🩺','Livestock Health & Disease Control (LHDCP)','Director AH'],
+  ]},
+  { icon:'🐂', name:'Livestock Development & Breeding', items:[
+    ['ArtificialInsemination','🧬','Artificial Insemination (AI)','ULDB'],
+    ['RGM','🐄','Rashtriya Gokul Mission (RGM)','ULDB'],
+    ['SheepGoat','🐐','Sheep & Goat Development','USGDB'],
+    ['Poultry','🐔','Poultry Development','Director AH'],
+    ['FodderDevelopment','🌾','Fodder & Feed Development','Director AH'],
+  ]},
+  { icon:'🎯', name:'Schemes & Missions', items:[
+    ['NLM','🎯','National Livestock Mission (NLM)','ULDB'],
+    ['LivestockInsurance','🛡️','Livestock Insurance (Pashudhan Bima)','Director AH'],
+    ['KCCAH','💳','Kisan Credit Card (AH)','Director AH'],
+    ['AHIDF','🏗️','AH Infrastructure Dev Fund (AHIDF)','Director AH'],
+    ['Entrepreneurship','🚀','Entrepreneurship & Startups','Director AH'],
+    ['NABARD','🏦','NABARD','Director AH'],
+    ['StateSectorInfra','🏢','State Sector Infrastructure','Director AH'],
+  ]},
+  { icon:'🧑‍🌾', name:'Extension & Farmer Welfare', items:[
+    ['GaushalaManagement','🛕','Gaushala Management','Director AH'],
+    ['PashuSakhi','🤝','Pashu Sakhi / Para-vets','Director AH'],
+    ['KamdhenuSchemes','🐄','Kamdhenu / Gau Seva Schemes','Director AH'],
+  ]},
+  { icon:'📊', name:'Finance & Performance', items:[
+    ['BudgetFinance','💰','Budget & Finance','Director AH'],
+    ['Procurement','🛒','Procurement','Director AH'],
+    ['KPIDashboard','📊','KPI / KOI Dashboard','Director AH'],
+  ]},
+  { icon:'📂', name:'Miscellaneous', items:[
+    ['Miscellaneous','📂','Miscellaneous',''],
+  ]},
 ];
+const ALL_WS = WS_GROUPS.flatMap(g=>g.items.map(i=>i[0]));
 
 let tasks       = [];
 let editingId   = null;
@@ -1004,6 +843,7 @@ let pbUser      = null;
 
 // ── Boot ──────────────────────────────────────────────────────
 window.onload = function() {
+  buildWorkstreamUI();
   pbUrl     = localStorage.getItem(PB_URL_KEY) || PB_DEFAULT;
   pbToken   = localStorage.getItem(PB_TOKEN_KEY) || '';
   try { pbUser = JSON.parse(localStorage.getItem(PB_USER_KEY) || 'null'); } catch(e){ pbUser = null; }
@@ -1211,18 +1051,44 @@ function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'
 const pOrd={critical:0,high:1,medium:2,low:3,info:4};
 
 // Workstream display labels
-const WS_LABELS = {
-  CabinetMatters:'Cabinet Matters', ImportantReferences:'Important References', DAHD:'DAHD (GoI)', CourtCases:'Court Cases', PoliciesSchemes:'Policies & Schemes', AuditVigilance:'Audit & Vigilance', DisciplinaryProceedings:'Disciplinary Proceedings', Establishment:'Establishment', TrainingCapacity:'Training & Capacity Building', PriorityProjects:'Priority Projects', RTI:'RTI', RTS:'RTS', PSC:'Public Service Commission', CMHelpline:'CM Helpline', CallCentre:'Call Centre (1962)',
-  VetHospitals:'Veterinary Hospitals & Dispensaries', DiseaseControl:'Disease Control & Surveillance', Vaccination:'Vaccination Programmes', FMDCP:'FMD Control (FMD-CP)', Brucellosis:'Brucellosis Control', MobileVetUnits:'Mobile Veterinary Units (1962)', VetLabs:'Veterinary Labs & Diagnostics', LHDCP:'Livestock Health & Disease Control (LHDCP)', Zoonotic:'Zoonotic & Anti-Rabies',
-  CattleBuffalo:'Cattle & Buffalo Development', ArtificialInsemination:'Artificial Insemination (AI)', RGM:'Rashtriya Gokul Mission (RGM)', SemenStations:'Semen Stations & Bull Farms', SheepGoat:'Sheep & Goat Development', Piggery:'Piggery Development', Poultry:'Poultry Development', FodderDevelopment:'Fodder & Feed Development', BreedConservation:'Breed Improvement & Conservation',
-  MilkProduction:'Milk Production', DairyCooperatives:'Dairy Cooperatives & Milk Unions', NPDD:'National Programme for Dairy Dev (NPDD)', DairyInfra:'Dairy Infrastructure (DIDF)', MilkMarketing:'Milk Procurement & Marketing',
-  NLM:'National Livestock Mission (NLM)', NADCP:'Animal Disease Control (NADCP)', LivestockInsurance:'Livestock Insurance (Pashudhan Bima)', KCCAH:'Kisan Credit Card (AH)', AHIDF:'AH Infrastructure Dev Fund (AHIDF)', Entrepreneurship:'Entrepreneurship & Startups', CMGhoshna:'CM Ghoshna', NABARD:'NABARD', EAP:'Externally Aided Projects (EAP)', CSS:'Centrally Sponsored Schemes (CSS)', StateSectorInfra:'State Sector Infrastructure',
-  GaushalaManagement:'Gaushala Management', FarmerTraining:'Farmer Training & Extension', PashuSakhi:'Pashu Sakhi / Para-vets', FieldCamps:'Field Services & Health Camps', KamdhenuSchemes:'Kamdhenu / Gau Seva Schemes',
-  SoftwareTechnology:'Software & Technology', INAPH:'INAPH / Livestock Registry', LivestockCensus:'Livestock Census & Data', ApuniSarkar:'Apuni Sarkar / e-Governance',
-  BudgetFinance:'Budget & Finance', Procurement:'Procurement', KPIDashboard:'KPI / KOI Dashboard',
-  IECPublicAwareness:'IEC & Public Awareness',
-  Miscellaneous:'Miscellaneous',
-};
+const WS_LABELS = Object.fromEntries(WS_GROUPS.flatMap(g=>g.items.map(i=>[i[0],i[2]])));
+const WS_OWNER  = Object.fromEntries(WS_GROUPS.flatMap(g=>g.items.map(i=>[i[0],i[3]])));
+
+function buildWorkstreamUI(){
+  var nav=document.getElementById('wsNav');
+  if(nav){
+    nav.innerHTML = WS_GROUPS.map(function(g){
+      return '<div class="sidebar-section"><span class="sidebar-label">'+g.icon+' '+g.name+'</span>'+
+        g.items.map(function(it){
+          var code=it[0],emoji=it[1],label=it[2],owner=it[3];
+          return '<button class="sidebar-item" id="nav-'+code+'" onclick="setView(\''+code+'\')">'+
+            '<span class="ws-text"><span class="ws-name">'+emoji+' '+label+'</span>'+
+            (owner?'<span class="ws-owner">👤 '+owner+'</span>':'')+'</span>'+
+            '<span class="sidebar-count" id="cnt-'+code+'">0</span></button>';
+        }).join('')+'</div>';
+    }).join('');
+  }
+  var sel=document.getElementById('f_workstream');
+  if(sel){
+    sel.innerHTML = WS_GROUPS.map(function(g){
+      return '<optgroup label="'+g.name+'">'+
+        g.items.map(function(it){ return '<option value="'+it[0]+'">'+it[2]+'</option>'; }).join('')+
+        '</optgroup>';
+    }).join('');
+  }
+}
+
+function onWorkstreamChange(){
+  var wsEl=document.getElementById('f_workstream'); if(!wsEl) return;
+  var ws=wsEl.value, owner=WS_OWNER[ws]||'', primary=owner.split(',')[0].trim();
+  var sel=document.getElementById('f_officer');
+  if(!editingId && primary && sel){
+    var has=false; for(var k=0;k<sel.options.length;k++){ if(sel.options[k].value===primary){has=true;break;} }
+    if(has) sel.value=primary;
+  }
+  var hint=document.getElementById('wsOwnerHint');
+  if(hint) hint.textContent = owner ? ('Responsible for this workstream: '+owner) : '';
+}
 
 // ── Filter ────────────────────────────────────────────────────
 function getFiltered() {
@@ -1417,6 +1283,7 @@ function openModal(id) {
     document.getElementById('f_status').value='pending';
   }
   renderSubFormList();
+  onWorkstreamChange();
   document.getElementById('modalOverlay').classList.add('open');
   document.getElementById('f_title').focus();
 }
@@ -1489,7 +1356,7 @@ const OFFICERS = [
   // Field / Veterinary
   'CVO','Sr Veterinary Officer','Veterinary Officer','LEO','Para-vet',
   // Dairy & Boards
-  'Director Dairy','MD Dairy Federation','CEO Livestock Board','Nodal Officer','Finance Consultant','MIS Consultant',
+  'Director Dairy','MD Dairy Federation','CEO Livestock Board','Nodal Officer','Finance Consultant','MIS Consultant', 'ULDB','USGDB',
   'Others'
 ];
 
