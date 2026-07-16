@@ -527,47 +527,13 @@
           <label class="form-label">Responsible Officer</label>
           <select class="form-select" id="f_officer">
             <option value="">— Select Officer —</option>
-            <optgroup label="Government">
-              <option value="Secretary">Secretary</option>
-              <option value="Additional Secretary">Additional Secretary</option>
-              <option value="JS">JS</option>
-              <option value="DS">DS</option>
-              <option value="US">US</option>
-              <option value="SO">SO</option>
-              <option value="PS Secretary">PS to Secretary</option>
-              <option value="PS AS">PS to AS</option>
-              <option value="Senior Consultant">Senior Consultant</option>
-              <option value="Consultant">Consultant</option>
-            </optgroup>
-            <optgroup label="Directorate — Animal Husbandry">
-              <option value="Director AH">Director, Animal Husbandry</option>
-              <option value="Additional Director AH">Additional Director, AH</option>
-              <option value="JD AH">Joint Director, AH</option>
-              <option value="JD Garhwal">JD Garhwal</option>
-              <option value="JD Kumaon">JD Kumaon</option>
-              <option value="DD AH">Deputy Director, AH</option>
-              <option value="DD Disease Control">DD Disease Control</option>
-              <option value="DD Breeding">DD Breeding</option>
-              <option value="DD Establishment">DD Establishment</option>
-            </optgroup>
-            <optgroup label="Field / Veterinary">
-              <option value="CVO">Chief Veterinary Officer (CVO)</option>
-              <option value="Sr Veterinary Officer">Sr. Veterinary Officer</option>
-              <option value="Veterinary Officer">Veterinary Officer (VO)</option>
-              <option value="LEO">Livestock Extension Officer (LEO)</option>
-              <option value="Para-vet">Para-vet / Pashudhan Sakhi</option>
-            </optgroup>
-            <optgroup label="Dairy &amp; Boards">
-              <option value="Director Dairy">Director, Dairy Development</option>
-              <option value="MD Dairy Federation">MD, Dairy Federation (Aanchal)</option>
-              <option value="CEO Livestock Board">CEO, Livestock Dev Board</option>
-              <option value="ULDB">ULDB — Livestock Dev Board</option>
-              <option value="USGDB">USGDB — Sheep &amp; Goat Board</option>
-              <option value="Nodal Officer">Nodal Officer</option>
-              <option value="Finance Consultant">Finance Consultant</option>
-              <option value="MIS Consultant">MIS Consultant</option>
-            </optgroup>
-            <option value="Others">Others</option>
+            <option value="Director AH">Director, Animal Husbandry</option>
+            <option value="ULDB">CEO, ULDB (Livestock Dev Board)</option>
+            <option value="USGDB">CEO, Sheep &amp; Goat Board (USGDB)</option>
+            <option value="SO">Section Officer (SO)</option>
+            <option value="AS">Additional Secretary (AS)</option>
+            <option value="PS AM">PS – AM</option>
+            <option value="PS JR">PS – JR</option>
           </select>
           <div id="wsOwnerHint" style="margin-top:5px;font-size:11px;color:var(--accent);font-weight:600;"></div>
         </div>
@@ -1348,17 +1314,7 @@ async function saveTask(){
 
 
 // ── Officers list ─────────────────────────────────────────────
-const OFFICERS = [
-  // Government
-  'Secretary','Additional Secretary','JS','DS','US','SO','PS Secretary','PS AS','Senior Consultant','Consultant',
-  // Directorate — Animal Husbandry
-  'Director AH','Additional Director AH','JD AH','JD Garhwal','JD Kumaon','DD AH','DD Disease Control','DD Breeding','DD Establishment',
-  // Field / Veterinary
-  'CVO','Sr Veterinary Officer','Veterinary Officer','LEO','Para-vet',
-  // Dairy & Boards
-  'Director Dairy','MD Dairy Federation','CEO Livestock Board','Nodal Officer','Finance Consultant','MIS Consultant', 'ULDB','USGDB',
-  'Others'
-];
+const OFFICERS = ['Director AH','ULDB','USGDB','SO','AS','PS AM','PS JR'];
 
 // Populate officer filter in toolbar from actual task data
 function populateOfficerFilter() {
