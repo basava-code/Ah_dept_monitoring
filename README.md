@@ -85,3 +85,5 @@ The front-end is fully static, so `index.html` and its assets can be served by n
 ---
 
 *Your Duty Today → A Farmer's Prosperity Tomorrow.*
+
+<!-- auto-deploy test: webhook-check -->
